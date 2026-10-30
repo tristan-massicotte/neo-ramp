@@ -1,60 +1,237 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--
+  OUTREACH PAGE TEMPLATE · Tristan Massicotte
+  - One file, no dependencies. Works offline and on GitHub Pages.
+  - Language: every visible string exists as <span lang="en"> and <span lang="fr">.
+    Set <html data-langs="en"> for English only (toggle hidden),
+    or data-langs="fr en" for French default with an English toggle.
+  - Per-company accent: change --accent in :root. Never use the company's logo, photos or brand colours.
+-->
+<html lang="en" data-langs="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NEO Factory ramp: notes for 1X · Tristan Massicotte</title>
+<meta name="robots" content="noindex">
+<title>NEO Factory: 24 → 2.4 minutes · Tristan Massicotte</title>
 <style>
-  :root { --ink:#111827; --quiet:#6b7280; --line:#e5e7eb; --accent:#1d4ed8; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Arial, sans-serif; color:var(--ink); background:#fff; line-height:1.5; }
-  main { max-width:640px; margin:0 auto; padding:48px 24px 64px; }
-  .eyebrow { font-size:13px; color:var(--quiet); letter-spacing:.02em; text-transform:uppercase; }
-  h1 { font-size:28px; line-height:1.2; margin:8px 0 12px; }
-  p.lead { font-size:17px; color:#374151; margin:0 0 32px; }
-  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:0 0 36px; }
-  .stat { border:1px solid var(--line); border-radius:10px; padding:14px; }
-  .stat b { display:block; font-size:22px; }
-  .stat span { font-size:13px; color:var(--quiet); }
-  a.item { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 18px; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:inherit; margin-bottom:10px; }
-  a.item:hover { border-color:var(--accent); }
-  a.item strong { display:block; font-size:16px; }
-  a.item small { color:var(--quiet); font-size:13px; }
-  a.item .arrow { color:var(--accent); font-size:20px; }
-  footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font-size:14px; color:var(--quiet); }
-  footer a { color:var(--accent); }
-  @media (max-width:520px){ .stats{ grid-template-columns:1fr; } h1{ font-size:24px; } }
+  :root{
+    --accent:#2563eb;            /* per-company accent */
+    --accent-soft:#eff4ff;
+    --ink:#0f172a; --body:#334155; --quiet:#64748b; --line:#e2e8f0; --bg:#ffffff; --panel:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;color:var(--body);background:var(--bg);line-height:1.55;font-size:16px}
+  main{max-width:680px;margin:0 auto;padding:28px 20px 56px}
+  span[lang]{display:none} html[data-show="en"] span[lang="en"], html[data-show="fr"] span[lang="fr"]{display:inline}
+  .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--quiet);margin-bottom:28px}
+  .toggle{border:1px solid var(--line);border-radius:999px;padding:4px;display:none;gap:2px}
+  html[data-langs~="fr"][data-langs~="en"] .toggle{display:inline-flex}
+  .toggle button{border:0;background:none;font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;color:var(--quiet);cursor:pointer}
+  .toggle button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .kicker{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+  h1{color:var(--ink);font-size:34px;line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
+  h1 .big{display:block;font-size:56px;letter-spacing:-.03em}
+  .lead{font-size:18px;margin:0 0 8px}
+  .note{font-size:13px;color:var(--quiet);margin:0}
+  section{margin-top:44px}
+  h2{color:var(--ink);font-size:21px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em}
+  .sub{margin:0 0 18px;color:var(--body)}
+  /* takt bars */
+  .bars{display:grid;gap:10px}
+  .bar{display:grid;grid-template-columns:76px 1fr;align-items:center;gap:12px}
+  .bar .vol{font-size:14px;color:var(--quiet);text-align:right;font-variant-numeric:tabular-nums}
+  .bar .track{position:relative;height:34px}
+  .bar .fill{height:100%;border-radius:6px;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);display:flex;align-items:center;padding:0 10px;min-width:max-content}
+  .bar.hot .fill{background:var(--accent);border-color:var(--accent)}
+  .bar .fill b{font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .bar.hot .fill b{color:#fff}
+  .chart{margin-top:28px}
+  .chart .sub{font-size:14px;color:var(--quiet);margin:0 0 10px}
+  /* about card */
+  .me{margin-top:32px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .me p{margin:0 0 14px}
+  .me b{color:var(--ink)}
+  .btns{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;border:1px solid var(--accent);color:var(--accent);background:var(--bg)}
+  .btn.primary{background:var(--accent);color:#fff}
+  /* collapsible analysis */
+  .cards{display:grid;gap:10px}
+  details.card{border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+  details.card[open]{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  details.card summary{list-style:none;cursor:pointer;padding:16px 48px 16px 16px;position:relative}
+  details.card summary::-webkit-details-marker{display:none}
+  details.card summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;line-height:1;color:var(--accent)}
+  details.card[open] summary::after{content:"\2212"}
+  details.card summary h3{margin:0;color:var(--ink);font-size:17px;line-height:1.3}
+  details.card summary .take{display:block;font-size:14px;color:var(--quiet);margin-top:3px}
+  details.card .body{padding:0 16px 16px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+  .stat:last-child{grid-column:1/-1}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .stat b{display:block;color:var(--ink);font-size:24px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat span{font-size:13px;color:var(--quiet)}
+  /* flow */
+  .flow{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  .flow li{border:1px solid var(--line);border-radius:12px;padding:12px 14px;position:relative}
+  .flow li+li::before{content:"";position:absolute;left:24px;top:-9px;width:1px;height:8px;background:var(--quiet)}
+  .flow li.hot{border:2px solid var(--accent);background:var(--accent-soft)}
+  .flow .name{font-weight:600;color:var(--ink)}
+  .flow .why{font-size:14px;margin-top:2px}
+  .flow.list li+li::before{display:none}
+  .flow .tag{float:right;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
+  /* plan */
+  .plan{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  .plan li{display:grid;grid-template-columns:68px 1fr;gap:10px}
+  .plan .wk{font-size:13px;font-weight:600;color:var(--accent);padding-top:2px}
+  .plan .what b{color:var(--ink)}
+  .ask{margin-top:18px;background:var(--ink);color:#e2e8f0;border-radius:14px;padding:20px}
+  .ask b{color:#fff}
+  /* links */
+  .links{display:grid;gap:10px}
+  .links a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit}
+  .links a:active,.links a:hover{border-color:var(--accent)}
+  .links strong{display:block;color:var(--ink)}
+  .links small{color:var(--quiet);font-size:13px}
+  .links .arr{color:var(--accent);font-size:20px}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:14px}
+  footer a{color:var(--accent)}
+  .src{font-size:12px;color:var(--quiet);margin-top:14px}
+  @media (min-width:640px){
+    main{padding:48px 24px 72px}
+    h1{font-size:40px} h1 .big{font-size:72px}
+    .stats{grid-template-columns:repeat(3,1fr)} .stat:last-child{grid-column:auto}
+    .bar{grid-template-columns:96px 1fr}
+  }
 </style>
 </head>
 <body>
 <main>
-  <div class="eyebrow">For the 1X manufacturing team</div>
-  <h1>NEO Factory: from 24-minute to 2.4-minute takt</h1>
-  <p class="lead">Notes on the 10k → 100k robots/yr ramp, built from public information by Tristan Massicotte, Industrial Engineering at the University of Toronto. Assumptions are labelled; the model lets you swap in real numbers.</p>
 
-  <div class="stats">
-    <div class="stat"><b>24 → 2.4 min</b><span>robot takt, 10k → 100k/yr</span></div>
-    <div class="stat"><b>1.9 s</b><span>per motor at 100k/yr (75 motors/robot)</span></div>
-    <div class="stat"><b>−90%</b><span>order processing time with the MRP I built</span></div>
+  <div class="top">
+    <span>Tristan Massicotte · U of T Industrial Engineering</span>
+    <span class="toggle" role="group" aria-label="Language">
+      <button type="button" data-set="fr">FR</button><button type="button" data-set="en">EN</button>
+    </span>
   </div>
 
-  <a class="item" href="NEO_Ramp_Memo_Tristan_Massicotte.pdf">
-    <div><strong>The 2-page memo</strong><small>Takt math, line walk, materials, my first 12 weeks</small></div><span class="arrow">→</span>
-  </a>
-  <a class="item" href="NEO_Ramp_Model_Tristan_Massicotte.xlsx">
-    <div><strong>The ramp model (Excel)</strong><small>Takt, station sizing, clear-to-build, BOM-change E&amp;O</small></div><span class="arrow">→</span>
-  </a>
-  <a class="item" href="Tristan_Massicotte_Resume.pdf">
-    <div><strong>Resume</strong><small>One page</small></div><span class="arrow">→</span>
-  </a>
-  <a class="item" href="https://tristan-massicotte.github.io/engineering-internship-highlights">
-    <div><strong>What I built at Technimount</strong><small>MRP, production board, executive dashboards</small></div><span class="arrow">→</span>
-  </a>
+  <p class="kicker"><span lang="en">Notes for the 1X manufacturing team</span><span lang="fr">Notes pour l'équipe de fabrication de 1X</span></p>
+  <h1>
+    <span lang="en">NEO Factory takt</span><span lang="fr">Takt de la NEO Factory</span>
+    <span class="big">24 → 2.4 min</span>
+  </h1>
+  <p class="lead"><span lang="en">Going from 10,000 to 100,000 NEOs a year means finishing a robot every 2.4 minutes instead of every 24. Here is where I think that bites first, and how I'd help.</span><span lang="fr">Passer de 10 000 à 100 000 NEO par an, c'est finir un robot toutes les 2,4 minutes au lieu de 24. Voici où ça risque de coincer en premier, et comment j'aiderais.</span></p>
+  <p class="note"><span lang="en">Built from public information only. Assumptions are labelled.</span><span lang="fr">Construit uniquement à partir d'information publique. Les hypothèses sont indiquées.</span></p>
+
+  <div class="chart">
+    <p class="sub"><span lang="en">Minutes per robot at each ramp step.</span><span lang="fr">Minutes par robot à chaque étape de la montée en cadence.</span></p>
+    <div class="bars">
+      <!-- widths = takt / 24 -->
+      <div class="bar"><div class="vol">10k/yr</div><div class="track"><div class="fill" style="width:100%"><b>24.0 min</b></div></div></div>
+      <div class="bar"><div class="vol">25k/yr</div><div class="track"><div class="fill" style="width:40%"><b>9.6 min</b></div></div></div>
+      <div class="bar"><div class="vol">50k/yr</div><div class="track"><div class="fill" style="width:20%"><b>4.8 min</b></div></div></div>
+      <div class="bar hot"><div class="vol">100k/yr</div><div class="track"><div class="fill" style="width:10%"><b>2.4 min</b></div></div></div>
+    </div>
+  </div>
+
+  <!-- WHO I AM: visible without scrolling through the analysis -->
+  <div class="me">
+    <p><span lang="en"><b>I'm Tristan</b>, a 2nd-year Industrial Engineering student at the University of Toronto. At Technimount, a manufacturer in Québec, I built an MRP system that <b>cut order processing time by 90%</b>, and I now build the production board that tracks inventory along their assembly line.</span><span lang="fr"><b>Je suis Tristan</b>, étudiant de 2e année en génie industriel à l'Université de Toronto. Chez Technimount, un fabricant québécois, j'ai bâti un système de planification des besoins matières qui a <b>réduit de 90 % le temps de traitement des commandes</b>, et je développe maintenant le tableau de production qui suit l'inventaire le long de leur ligne d'assemblage.</span></p>
+    <div class="btns">
+      <a class="btn primary" href="Tristan_Massicotte_Resume.pdf"><span lang="en">Resume</span><span lang="fr">CV</span></a>
+      <a class="btn" href="https://tristan-massicotte.github.io/engineering-internship-highlights" target="_blank" rel="noopener"><span lang="en">Internship highlights</span><span lang="fr">Faits saillants de stage</span></a>
+      <a class="btn" href="https://linkedin.com/in/tristan-massicotte" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+
+  <!-- ANALYSIS: collapsed by default, one-line takeaway on each -->
+  <section>
+    <h2><span lang="en">The analysis</span><span lang="fr">L'analyse</span></h2>
+    <p class="sub"><span lang="en">Tap to open. Built from public information; assumptions labelled.</span><span lang="fr">Touchez pour ouvrir. Construit à partir d'information publique; hypothèses indiquées.</span></p>
+    <div class="cards">
+      <details class="card">
+        <summary><h3><span lang="en">1. The line gets 10× faster</span><span lang="fr">1. La ligne devient 10× plus rapide</span></h3><span class="take"><span lang="en">A motor every 1.9 s at 100k robots a year.</span><span lang="fr">Un moteur toutes les 1,9 s à 100k robots par année.</span></span></summary>
+        <div class="body">
+        <div class="stats">
+          <div class="stat"><b>1.9 s</b><span><span lang="en">per motor at 100k/yr</span><span lang="fr">par moteur à 100k/an</span></span></div>
+          <div class="stat"><b>7.5 M</b><span><span lang="en">motors per year</span><span lang="fr">moteurs par année</span></span></div>
+          <div class="stat"><b>~9 h</b><span><span lang="en">to rebuild the 17,000 motors made so far</span><span lang="fr">pour refaire les 17 000 moteurs produits à date</span></span></div>
+        </div>
+        <p class="src"><span lang="en">Assumes 250 days × 2 shifts × 8 h, 100% availability, and 75 motors per robot (NEO's published 75 degrees of freedom).</span><span lang="fr">Hypothèses : 250 jours × 2 quarts × 8 h, disponibilité 100 %, 75 moteurs par robot (75 degrés de liberté publiés).</span></p>
+        </div>
+      </details>
+      <details class="card">
+        <summary><h3><span lang="en">2. Where 2.4 minutes bites first</span><span lang="fr">2. Où 2,4 minutes coince en premier</span></h3><span class="take"><span lang="en">Motor lines, kitting, and timed tendon steps.</span><span lang="fr">Lignes moteurs, kits, et étapes de tendons chronométrées.</span></span></summary>
+        <div class="body">
+        <p class="sub"><span lang="en">The flow as 1X describes the Hayward factory. Highlighted steps are my hypotheses.</span><span lang="fr">Le flux tel que 1X décrit l'usine de Hayward. Les étapes surlignées sont mes hypothèses.</span></p>
+        <ol class="flow">
+          <li><div class="name"><span lang="en">Warehouse and machine park</span><span lang="fr">Entrepôt et parc machines</span></div></li>
+          <li class="hot"><span class="tag"><span lang="en">Watch</span><span lang="fr">À surveiller</span></span><div class="name"><span lang="en">Motor and battery lines</span><span lang="fr">Lignes moteurs et batteries</span></div><div class="why"><span lang="en">A motor every 1.9 s. The automated cell cycle time sets the ceiling.</span><span lang="fr">Un moteur toutes les 1,9 s. Le temps de cycle des cellules automatisées fixe le plafond.</span></div></li>
+          <li class="hot"><span class="tag"><span lang="en">Watch</span><span lang="fr">À surveiller</span></span><div class="name"><span lang="en">Kitting</span><span lang="fr">Préparation des kits</span></div><div class="why"><span lang="en">Single-piece flow needs a complete kit at every station, every 2.4 min. Kitting becomes its own line.</span><span lang="fr">Le flux pièce à pièce exige un kit complet à chaque poste, toutes les 2,4 min. Les kits deviennent une ligne à part entière.</span></div></li>
+          <li class="hot"><span class="tag"><span lang="en">Watch</span><span lang="fr">À surveiller</span></span><div class="name"><span lang="en">Joint and limb assembly</span><span lang="fr">Assemblage des articulations et membres</span></div><div class="why"><span lang="en">Tendon conditioning is timed: positions = step time ÷ takt. A 60-min step needs 3 positions at 24 min, 25 at 2.4.</span><span lang="fr">Le conditionnement des tendons est chronométré : postes = durée ÷ takt. Une étape de 60 min demande 3 postes à 24 min, 25 à 2,4.</span></div></li>
+          <li><div class="name"><span lang="en">Final integration</span><span lang="fr">Intégration finale</span></div></li>
+          <li><div class="name"><span lang="en">Ship to customers</span><span lang="fr">Expédition aux clients</span></div></li>
+        </ol>
+        </div>
+      </details>
+      <details class="card">
+        <summary><h3><span lang="en">3. A model you can run on your numbers</span><span lang="fr">3. Un modèle à faire tourner avec vos chiffres</span></h3><span class="take"><span lang="en">Takt, stations, clear-to-build and stock risk in one spreadsheet.</span><span lang="fr">Takt, postes, « clear-to-build » et risque de stock dans un seul chiffrier.</span></span></summary>
+        <div class="body">
+          <ol class="flow list">
+            <li><div class="name"><span lang="en">Takt</span><span lang="fr">Takt</span></div><div class="why"><span lang="en">Pace per robot and per motor at each ramp step.</span><span lang="fr">Cadence par robot et par moteur à chaque étape de la montée.</span></div></li>
+            <li><div class="name"><span lang="en">Station sizing</span><span lang="fr">Dimensionnement des postes</span></div><div class="why"><span lang="en">How many positions and motor cells each takt needs.</span><span lang="fr">Combien de postes et de cellules moteurs chaque takt demande.</span></div></li>
+            <li><div class="name"><span lang="en">Clear-to-build</span><span lang="fr">Clear-to-build</span></div><div class="why"><span lang="en">How many robots you can start today: the scarcest commodity sets the answer.</span><span lang="fr">Combien de robots on peut lancer aujourd'hui : le composant le plus rare donne la réponse.</span></div></li>
+            <li><div class="name"><span lang="en">BOM change</span><span lang="fr">Changement de nomenclature</span></div><div class="why"><span lang="en">Excess stock left when a new hand revision cuts in, week by week.</span><span lang="fr">Le surplus laissé quand une nouvelle version de la main entre en production, semaine par semaine.</span></div></li>
+          </ol>
+          <p class="src" style="margin-bottom:14px"><span lang="en">Blue cells are inputs; yellow cells are my assumptions, to replace with real data. Quantities are examples.</span><span lang="fr">Cellules bleues : entrées; cellules jaunes : mes hypothèses, à remplacer par les vraies données. Les quantités sont des exemples.</span></p>
+          <div class="btns"><a class="btn primary" href="NEO_Ramp_Model_Tristan_Massicotte.xlsx"><span lang="en">Download the model (Excel)</span><span lang="fr">Télécharger le modèle (Excel)</span></a></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- 4. PLAN + ASK -->
+  <section>
+    <h2><span lang="en">My 16 weeks on the line</span><span lang="fr">Mes 16 semaines sur la ligne</span></h2>
+    <ol class="plan">
+      <li><span class="wk"><span lang="en">Wk 1–2</span><span lang="fr">Sem. 1–2</span></span><span class="what"><b><span lang="en">Work the line.</span><span lang="fr">Travailler sur la ligne.</span></b> <span lang="en">A shift at each station; time-study real cycles to set a baseline.</span><span lang="fr">Un quart à chaque poste; étude de temps des cycles réels pour établir une base.</span></span></li>
+      <li><span class="wk"><span lang="en">Wk 3–6</span><span lang="fr">Sem. 3–6</span></span><span class="what"><b><span lang="en">Own one shortage loop.</span><span lang="fr">Prendre en charge une boucle de pénuries.</span></b> <span lang="en">Log every stop caused by an incomplete kit, chase root causes with planning and suppliers, and run a daily clear-to-build report.</span><span lang="fr">Noter chaque arrêt causé par un kit incomplet, remonter aux causes avec la planification et les fournisseurs, et tenir un rapport quotidien de « clear-to-build ».</span></span></li>
+      <li><span class="wk"><span lang="en">Wk 7–11</span><span lang="fr">Sem. 7–11</span></span><span class="what"><b><span lang="en">Rebalance one module for the higher rate.</span><span lang="fr">Rééquilibrer un module pour la cadence cible.</span></b> <span lang="en">Line balance, station count and kit rhythm, worked out with the operators who run it.</span><span lang="fr">Équilibrage, nombre de postes et rythme des kits, établis avec les opérateurs qui le font tourner.</span></span></li>
+      <li><span class="wk"><span lang="en">Wk 12–16</span><span lang="fr">Sem. 12–16</span></span><span class="what"><b><span lang="en">Run it and prove it.</span><span lang="fr">Le mettre en marche et le prouver.</span></b> <span lang="en">Pilot the new balance on the floor, measure output and stops against the week-2 baseline, fix what breaks, then take on a second module.</span><span lang="fr">Tester le nouvel équilibrage sur le plancher, mesurer la production et les arrêts par rapport à la base de la semaine 2, corriger ce qui casse, puis attaquer un deuxième module.</span></span></li>
+    </ol>
+    <div class="ask">
+      <b><span lang="en">My ask:</span><span lang="fr">Ma demande :</span></b>
+      <span lang="en">a four-month summer 2027 internship in production control or planning, on the floor in Hayward or San Carlos. I'd come on a J-1 intern visa; I handle the paperwork, 1X signs a training plan.</span><span lang="fr">un stage de quatre mois à l'été 2027 en contrôle ou planification de production, sur le plancher à Hayward ou San Carlos. Je viendrais avec un visa J-1 de stagiaire; je m'occupe des démarches, 1X signe un plan de formation.</span>
+    </div>
+  </section>
+
+  <!-- 5. LINKS -->
+  <section>
+    <h2><span lang="en">Links</span><span lang="fr">Liens</span></h2>
+    <div class="links">
+      <a href="NEO_Ramp_Model_Tristan_Massicotte.xlsx"><div><strong><span lang="en">Ramp model (Excel)</span><span lang="fr">Modèle de montée en cadence (Excel)</span></strong><small><span lang="en">Swap in real numbers; everything recalculates</span><span lang="fr">Remplacez par les vrais chiffres; tout se recalcule</span></small></div><span class="arr">→</span></a>
+      <a href="Tristan_Massicotte_Resume.pdf"><div><strong><span lang="en">Resume</span><span lang="fr">CV</span></strong><small><span lang="en">One page</span><span lang="fr">Une page</span></small></div><span class="arr">→</span></a>
+      <a href="https://tristan-massicotte.github.io/engineering-internship-highlights" target="_blank" rel="noopener"><div><strong><span lang="en">What I built at Technimount</span><span lang="fr">Ce que j'ai construit chez Technimount</span></strong><small><span lang="en">MRP (−90% order processing time), production board, dashboards</span><span lang="fr">MRP (−90 % du temps de traitement des commandes), tableau de production, tableaux de bord</span></small></div><span class="arr">→</span></a>
+    </div>
+  </section>
 
   <footer>
-    Looking for a summer 2027 internship in production control or planning, on the floor.<br>
-    <a href="mailto:tristanmassicotte@me.com">tristanmassicotte@me.com</a> · +1 581-980-9117 · <a href="https://linkedin.com/in/tristan-massicotte">LinkedIn</a>
+    <b>Tristan Massicotte</b> · <a href="mailto:tristanmassicotte@me.com">tristanmassicotte@me.com</a> · +1 581-980-9117 · <a href="https://linkedin.com/in/tristan-massicotte" target="_blank" rel="noopener">LinkedIn</a>
+    <p class="src"><span lang="en">Sources: 1X "NEO Factory | Building Your NEO" (Apr 30 2026); 1X factory release (GlobeNewswire, Apr 30 2026); humanoid.guide NEO spec sheet and "NEO Gets New Hands" (Jul 2026); 1X Supply Chain Planner job posting; Silicon Report summary of Bloomberg. Not affiliated with 1X.</span><span lang="fr">Sources : 1X « NEO Factory | Building Your NEO » (30 avr. 2026); communiqué d'ouverture de l'usine (GlobeNewswire, 30 avr. 2026); fiche NEO et « NEO Gets New Hands » de humanoid.guide (juil. 2026); offre d'emploi Supply Chain Planner de 1X; résumé de Bloomberg par Silicon Report. Aucune affiliation avec 1X.</span></p>
   </footer>
 </main>
+<script>
+  (function(){
+    var root=document.documentElement;
+    var langs=(root.getAttribute('data-langs')||'en').split(/\s+/);
+    var saved=null; try{saved=localStorage.getItem('lang')}catch(e){}
+    function set(l){ if(langs.indexOf(l)<0) l=langs[0];
+      root.setAttribute('data-show',l); root.setAttribute('lang',l);
+      document.querySelectorAll('.toggle button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===l)});
+      try{localStorage.setItem('lang',l)}catch(e){} }
+    document.querySelectorAll('.toggle button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.set)})});
+    set(saved||langs[0]);
+  })();
+</script>
 </body>
 </html>
